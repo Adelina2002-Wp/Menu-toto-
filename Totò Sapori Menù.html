@@ -1,0 +1,344 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Totò Sapori Menù</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: ink-on-paper menu. Sticky chip nav over a single column that opens to two columns on wide screens; prices sit on dotted leaders like the printed menu. */
+:root {
+  --paper: #f6f6f2;
+  --ink: #1c1e20;
+  --ink-soft: #5a5f63;
+  --rule: #cfd1cc;
+  --tomato: #c4311f;
+  --chip: #ebebe6;
+  --f-display: "Bricolage Grotesque", "Arial Narrow", Arial, sans-serif;
+  --f-body: "Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #17191a; --ink: #eeeee8; --ink-soft: #a2a7a9; --rule: #34383a; --tomato: #ee6a56; --chip: #232627;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #17191a; --ink: #eeeee8; --ink-soft: #a2a7a9; --rule: #34383a; --tomato: #ee6a56; --chip: #232627;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--f-body); font-size: 16px; line-height: 1.45;
+  padding-inline: 16px; padding-block: 0 48px;
+}
+.wrap { max-width: 1040px; margin-inline: auto; }
+header { padding-block: 40px 20px; display: flex; flex-direction: column; gap: 6px; }
+.kicker { font-size: 12px; letter-spacing: .18em; text-transform: uppercase; color: var(--ink-soft); font-weight: 600; }
+h1 { font-family: var(--f-display); font-weight: 800; font-size: clamp(44px, 12vw, 88px); line-height: .92; margin: 0; letter-spacing: -.02em; text-transform: uppercase; text-wrap: balance; }
+h1 span { color: var(--tomato); }
+.sub { color: var(--ink-soft); margin: 6px 0 0; max-width: 46ch; }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--rule); padding-block: 10px; margin-inline: -16px; padding-inline: 16px; display: flex; flex-direction: column; gap: 10px; }
+.search { width: 100%; max-width: 1040px; margin-inline: auto; display: block; font: inherit; color: var(--ink); background: var(--chip); border: 1px solid transparent; border-radius: 10px; padding: 11px 14px; }
+.search:focus-visible, .chips a:focus-visible, .leg-btn:focus-visible { outline: 2px solid var(--tomato); outline-offset: 2px; }
+.chips { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; max-width: 1040px; width: 100%; margin-inline: auto; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chips a { flex: none; text-decoration: none; color: var(--ink); background: var(--chip); border-radius: 999px; padding: 7px 14px; font-size: 14px; font-weight: 500; white-space: nowrap; }
+.chips a.on { background: var(--ink); color: var(--paper); }
+.chips .sep { flex: none; width: 1px; background: var(--rule); margin-inline: 4px; }
+
+section { padding-top: 44px; scroll-margin-top: 130px; }
+.sec-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; border-bottom: 2px solid var(--ink); padding-bottom: 8px; margin-bottom: 8px; }
+h2 { font-family: var(--f-display); font-weight: 800; font-size: clamp(28px, 6vw, 40px); margin: 0; text-transform: uppercase; letter-spacing: -.01em; line-height: 1; }
+.sec-note { color: var(--ink-soft); font-size: 14px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); column-gap: 48px; }
+.item { padding-block: 14px; border-bottom: 1px solid var(--rule); min-width: 0; }
+.row { display: flex; align-items: baseline; gap: 8px; }
+.name { font-family: var(--f-display); font-weight: 700; font-size: 18px; text-transform: uppercase; letter-spacing: .01em; min-width: 0; overflow-wrap: anywhere; }
+.lead { flex: 1; border-bottom: 2px dotted var(--rule); transform: translateY(-4px); min-width: 12px; }
+.price { font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
+.price::before { content: "€\00a0"; color: var(--tomato); }
+.desc { margin: 4px 0 0; color: var(--ink-soft); font-size: 15px; display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.al { display: inline-flex; gap: 3px; }
+.al b { font-size: 11px; font-weight: 600; line-height: 1; padding: 3px 5px; border: 1px solid var(--rule); border-radius: 4px; color: var(--ink-soft); }
+.sizes { display: flex; flex-direction: column; gap: 2px; margin-top: 6px; }
+.size { display: flex; align-items: baseline; gap: 8px; color: var(--ink-soft); font-size: 15px; }
+.size .lab { min-width: 0; overflow-wrap: anywhere; }
+.size .price { color: var(--ink); }
+.item.multi .row .lead, .item.multi .row .price { display: none; }
+.plain .sizes { margin-top: 0; }
+.extras { columns: 2 320px; column-gap: 48px; }
+.extras .size { break-inside: avoid; padding-block: 6px; border-bottom: 1px solid var(--rule); font-size: 16px; color: var(--ink); }
+.empty { padding-block: 60px; text-align: center; color: var(--ink-soft); }
+
+footer { margin-top: 64px; padding-top: 28px; border-top: 2px solid var(--ink); display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 32px; }
+footer h3 { font-family: var(--f-display); text-transform: uppercase; font-size: 18px; margin: 0 0 10px; }
+.legend { display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; margin: 0; font-size: 15px; }
+.legend dt { font-weight: 700; color: var(--tomato); font-family: var(--f-display); }
+.legend dd { margin: 0; }
+.social { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.social a { color: var(--ink); }
+.small { font-size: 13px; color: var(--ink-soft); margin-top: 14px; }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="kicker">Ristorante · Pizzeria · Wien</div>
+    <h1>Totò <span>Sapori</span></h1>
+    <p class="sub">Speisekarte · Menù. Preise in Euro, inklusive Steuern.</p>
+  </header>
+</div>
+
+<div class="bar">
+  <input id="q" class="search" type="search" placeholder="Suchen · Cerca (z. B. Burrata, Tiramisù)" autocomplete="off" aria-label="Menü durchsuchen">
+  <nav class="chips" id="chips" aria-label="Kategorien"></nav>
+</div>
+
+<main class="wrap" id="menu"></main>
+
+<div class="wrap">
+  <footer>
+    <div>
+      <h3>Allergeninformation</h3>
+      <dl class="legend" id="legend"></dl>
+      <p class="small">Codex-Empfehlung. Bei Fragen zu Allergenen sprechen Sie bitte unser Team an.</p>
+    </div>
+    <div>
+      <h3>Social</h3>
+      <ul class="social">
+        <li>Facebook · @Totò Sapori-Ristorante Pizzeria</li>
+        <li><a href="https://www.instagram.com/totosapori.gasometer" target="_blank" rel="noopener">Instagram · @totosapori.gasometer</a></li>
+        <li><a href="https://www.instagram.com/totosapori2.0" target="_blank" rel="noopener">Instagram · @totosapori2.0</a></li>
+      </ul>
+    </div>
+  </footer>
+</div>
+
+<script>
+const ALLERGENS = {
+  A: "glutenhaltiges Getreide", B: "Krebstiere", C: "Eier", D: "Fisch", E: "Erdnüsse", F: "Soja",
+  G: "Milch oder Laktose", H: "Schalenfrüchte", L: "Sellerie", M: "Senf", N: "Sesam", O: "Sulfite", P: "Lupinen", R: "Weichtiere"
+};
+
+// i: [name, description, price | [[label, price], ...], allergens]
+const MENU = [
+  { id: "antipasti", title: "Antipasti", items: [
+    ["Bruschetta", "Kirschtomaten, Basilikum, Oregano, Olivenöl, Knoblauchöl", "6,80", "A"],
+    ["Pizza-Brot", "", [["mit Olivenöl", "5,50"], ["mit Knoblauchöl", "6,00"]], "A"],
+    ["Carpaccio", "Rind-Carpaccio, Rucola, Kirschtomaten, Parmesan", "16,00", "G"],
+    ["Antipasto misto italiano", "Gemischter italienischer Vorspeisenteller", "13,80", "AG"],
+    ["Brot", "", [["3 Stk.", "1,80"], ["6 Stk.", "2,80"]], "A"],
+  ]},
+  { id: "insalate", title: "Insalate", items: [
+    ["Insalata mista", "", [["klein", "4,00"], ["groß", "5,60"]], ""],
+    ["Tonno e Cipolla-Salat", "Gemischter Salat, Thunfisch, Zwiebeln", "12,90", "D"],
+    ["Caprese-Salat", "Rispentomaten, Mozzarella, Oregano, Basilikum, Balsamico Essig Sauce", [["mit Mozzarella", "12,50"], ["mit Büffelmozzarella", "16,90"]], "G"],
+    ["San Daniele-Salat", "Grüner Salat, Rohschinken, Trüffelcreme, Walnüsse, Parmesan", "14,00", "GH"],
+    ["Apfel-Salat", "Gemischter Salat, Mozzarella, Walnüsse, Apfel, Balsamico Essig Sauce", "12,90", "GH"],
+    ["Spezial-Salat", "Gemischter Salat, Hühnerstreifen, Kürbiskerne, Sonnenblumenkerne, Parmesan", "15,00", "AG"],
+    ["Pollo-Salat", "Gemischter Salat, Hühnerstreifen", "13,90", "AG"],
+  ]},
+  { id: "primi", title: "Primi piatti", items: [
+    ["Lasagne vegetariane", "Tomatensauce, Mozzarella, Gemüse, Bechamel", "13,80", "AGL"],
+    ["Lasagne", "Tomatensauce, Faschiertes, Bechamel", "11,80", "AGL"],
+    ["Penne / Spaghetti Pomodoro", "Tomatensauce", "12,60", "A"],
+    ["Gnocchi Sorrentina", "Tomatensauce, Mozzarella", "13,00", "AG"],
+    ["Penne / Spaghetti Arrabbiata", "Tomatensauce, Knoblauch, Chili, Petersilie", "12,90", "A"],
+    ["Gnocchi Quattro Formaggi", "Vier Käsesorten", "14,20", "AG"],
+  ]},
+  { id: "classiche", title: "Pizze classiche", items: [
+    ["Marinara", "Tomaten, Oregano, Knoblauchöl, Basilikum", "9,90", "A"],
+    ["Margherita", "Tomaten, Mozzarella, Basilikum", "11,10", "AG"],
+    ["Cotto", "Tomaten, Mozzarella, Schinken, Basilikum", "11,50", "AG"],
+    ["Diavola", "Tomaten, Mozzarella, scharfe Salami, Basilikum", "12,00", "AG"],
+    ["Salame", "Tomaten, Mozzarella, Salami, Basilikum", "12,00", "AG"],
+    ["Capricciosa", "Tomaten, Mozzarella, Schinken, Oliven, Champignons, Artischocken, Basilikum", "14,50", "AG"],
+    ["Siciliana", "Tomaten, Mozzarella, Melanzani, Basilikum", "14,00", "AG"],
+    ["Prosciutto & Funghi", "Tomaten, Mozzarella, Schinken, Champignons, Basilikum", "12,50", "AG"],
+    ["Bufalina", "Tomaten, Büffelmozzarella, Basilikum", "14,00", "AG"],
+    ["Tonno & Cipolla", "Tomaten, Mozzarella, Thunfisch, Zwiebeln, Basilikum", "14,00", "ADG"],
+    ["Calzone", "Mozzarella, Schinken, Salami, Ricotta, Basilikum", "13,80", "AG"],
+    ["Provola e Pepe", "Tomaten, geräucherter Provola, Pfeffer, Basilikum", "14,00", "AG"],
+    ["San Daniele", "Tomaten, Mozzarella, Rucola, Rohschinken, Parmesan", "14,90", "AG"],
+    ["Vegetariana", "Tomaten, Mozzarella, Gemüse, Basilikum", "14,00", "AG"],
+  ]},
+  { id: "bianche", title: "Pizze bianche", items: [
+    ["Quattro Formaggi", "Gorgonzola, Mozzarella, Provola, Büffelmozzarella, Basilikum", "14,00", "AG"],
+    ["Rustica", "Mozzarella, scharfe Salami, Champignons, Kirschtomaten, Basilikum", "14,00", "AG"],
+    ["Susanna", "Schlagobers, Schinken, Mais, Mozzarella, Basilikum", "13,00", "AG"],
+    ["Romantica", "Büffelmozzarella, getrocknete Tomaten, Basilikum", "14,90", "AG"],
+    ["Totò", "Büffelmozzarella, Thunfisch, gelbe Tomaten, Basilikum", "16,00", "ADG"],
+    ["Sorrento", "Büffelmozzarella, Rohschinken, Zitronenöl, gelbe Tomaten, Basilikum", "15,50", "AG"],
+    ["Pizza Caprese", "Kirschtomaten, Rucola, Mozzarella, Parmesan-Flocken (ungekocht)", "14,50", "AG"],
+    ["Pizza Pizzutello", "Mozzarella, gelbe Tomaten, Burrata 125 g, Basilikum", "16,50", "AG"],
+    ["Radicchio", "Mozzarella, Gorgonzola, scharfe Salami, Radicchio, Basilikum", "15,00", "AG"],
+    ["Salsiccia e Friarelli", "Mozzarella, Salsiccia, Friarelli, Basilikum", "16,90", "AG"],
+    ["Pistacchio", "Mozzarella, Pistazien-Creme, Mortadella, Basilikum", "15,90", "AGH"],
+  ]},
+  { id: "speciali", title: "Pizze speciali", items: [
+    ["Pizza Carpaccio", "Tomaten, Mozzarella, Rucola, Rind-Carpaccio, Zitronenöl, Parmesan", "16,90", "AG"],
+    ["Burratina", "Tomaten, Mozzarella, Burrata (125 g), Basilikum", "15,00", "AG"],
+    ["Pizza Lasagna", "Tomaten, Mozzarella, Ricotta, Salami, Pfeffer, Basilikum", "14,00", "AG"],
+    ["La Tirolese", "Steinpilz-Trüffel-Creme, Büffelmozzarella, Speck, Basilikum", "15,50", "AG"],
+    ["Pizza Pesto", "Basilikum-Pesto, Mozzarella, Kirschtomaten, Basilikum", "14,50", "AG"],
+    ["Montanara", "Walnuss-Creme, Speck, Mozzarella, Basilikum", "15,00", "AGH"],
+    ["Zingara Panino", "Pizzateig-Sandwich mit grünem Salat, Tomatenrispe, Rohschinken, Mozzarella", "14,80", "AG"],
+    ["Suprema", "Artischocken-Creme, Mozzarella, scharfe Salami, Basilikum", "14,50", "AG"],
+    ["Marì", "Getrocknete-Tomaten-Pesto, Feta, Mozzarella, Kirschtomaten, Basilikum", "15,00", "AG"],
+    ["On' Salvatore", "Tomaten, Mozzarella, Oliven, Sardellen, Kapern, Basilikum", "13,00", "ADG"],
+  ]},
+  { id: "dessert", title: "Dessert", note: "mit Schlagobers", items: [
+    ["Tiramisù classico", "", "6,00", "ACG"],
+    ["Tiramisù Pistazie", "", "7,00", "ACGH"],
+    ["Profiteroles", "", "6,80", "AG"],
+    ["Torta della Nonna", "", "6,50", "AGH"],
+    ["Sorbetto al limone", "", "6,70", ""],
+    ["Calzone Pistacchio", "mit Mascarpone und Pistaziencreme", "14,50", "AGH"],
+    ["Calzone Nutella", "mit Mascarpone und Nutella", "11,90", "AGH"],
+    ["Panna Cotta", "Caramel, Amarena oder Nutella", "5,90", "G"],
+    ["Tartufo Eis", "Schokolade, weiße Schokolade oder Haselnuss", "6,00", "GH"],
+    ["Tris di Tartufi", "Tris Tartufo Eis", "15,90", "GH"],
+  ]},
+  { id: "extra", title: "Extra Beilagen", note: "für diverse Gerichte", extras: [
+    ["Rucola · Mais", "2,00"], ["Kapern · Zwiebeln", "1,50"], ["Extra Basilikum", "1,00"], ["Oliven · Pilze", "2,00"],
+    ["Extra Burrata · Salsiccia", "4,50"], ["Sardellen · Thunfisch", "3,00"], ["Provola · getrocknete Tomaten", "3,00"],
+    ["Extra Tomatensauce", "1,50"], ["Speck · Salami · scharfe Salami", "2,50"], ["Extra Gemüse", "3,90"],
+    ["Mozzarella · Gorgonzola", "2,90"], ["Feta · Kirschtomaten", "2,50"], ["Artischocken · Cotto-Schinken", "2,50"],
+    ["Extra Parma-Schinken", "3,90"], ["Büffelmozzarella", "3,90"], ["Extra Sahne", "1,90"],
+    ["Extra Pistazien-Creme · Nuss-Creme · Pesto · Pilze mit Trüffelcreme", "4,50"],
+  ]},
+  { id: "aperitivi", title: "Aperitivi e vino", group: "drinks", al: "O", items: [
+    ["Campari Orange", "", [["¼ l", "6,30"]], ""],
+    ["Campari Soda", "", [["¼ l", "6,00"]], ""],
+    ["Aperol · Hugo", "", [["¼ l", "6,20"]], ""],
+    ["Campari Spritz", "", [["¼ l", "6,50"]], ""],
+    ["Weiß gespritzt", "", [["¼ l", "4,20"], ["½ l", "8,00"]], ""],
+    ["Prosecco Soligo", "", [["0,1 l", "5,60"], ["Flasche 0,75 l", "28,00"]], ""],
+    ["Pinot Grigio", "", [["⅛ l", "4,10"], ["¼ l", "7,80"], ["Flasche 0,75 l", "22,50"]], ""],
+    ["Montepulciano", "", [["⅛ l", "4,50"], ["¼ l", "7,90"]], ""],
+    ["Nero d'Avola", "", [["⅛ l", "5,20"], ["¼ l", "8,90"], ["Flasche 0,75 l", "25,00"]], ""],
+    ["Lambrusco", "", [["⅛ l", "4,60"], ["¼ l", "8,00"], ["Flasche 0,75 l", "23,00"]], ""],
+    ["Falanghina", "", [["Flasche 0,75 l", "24,00"]], ""],
+  ]},
+  { id: "bevande", title: "Bevande", note: "alkoholfrei", group: "drinks", items: [
+    ["Soda", "", [["0,3 l", "2,30"], ["0,5 l", "3,60"]], ""],
+    ["Soda Zitrone · Himbeer · Holunder", "", [["0,3 l", "2,70"], ["0,5 l", "4,30"]], ""],
+    ["Leitungswasser Zitrone · Himbeer · Holunder", "", [["0,3 l", "1,50"], ["0,5 l", "2,20"]], ""],
+    ["Leitungswasser", "", [["0,3 l", "0,50"], ["0,5 l", "0,70"]], ""],
+    ["Chinotto", "", [["0,2 l", "3,50"]], ""],
+    ["Cola · Cola Zero · Fanta", "", [["0,33 l", "3,30"], ["0,5 l", "5,80"]], ""],
+    ["Spezi", "", [["0,33 l", "3,60"], ["0,5 l", "5,00"]], ""],
+    ["Fuzetea Zitrone · Pfirsich", "", [["0,25 l", "3,20"], ["0,5 l", "5,50"]], ""],
+    ["Mineral prickelnd, S. Pellegrino", "", [["0,25 l", "3,20"], ["0,75 l", "6,00"]], ""],
+    ["Mineral Römerquelle still · prickelnd", "", [["0,33 l", "3,00"]], ""],
+    ["Saft pur Marille · Johannisbeere · Apfel · Orange", "", [["0,3 l", "3,80"], ["0,5 l", "4,90"]], ""],
+    ["Saft mit Soda", "", [["0,3 l", "3,40"], ["0,5 l", "4,50"]], ""],
+    ["Saft mit Wasser", "", [["0,3 l", "3,20"], ["0,5 l", "3,90"]], ""],
+    ["Almdudler", "", [["0,3 l", "2,90"], ["0,5 l", "4,70"]], ""],
+    ["Almdudler mit Soda", "", [["0,3 l", "2,70"], ["0,5 l", "4,20"]], ""],
+    ["Almdudler mit Wasser", "", [["0,3 l", "2,50"], ["0,5 l", "3,70"]], ""],
+    ["Red Bull", "", [["0,33 l", "3,90"]], ""],
+    ["Lemon Soda", "", [["0,33 l", "3,20"]], ""],
+  ]},
+  { id: "birra", title: "Birra", group: "drinks", al: "A", items: [
+    ["Gösser vom Fass", "", [["0,3 l", "4,10"], ["0,5 l", "5,10"]], ""],
+    ["Gösser Radler", "", [["0,3 l", "4,00"], ["0,5 l", "4,90"]], ""],
+    ["Radler mit Soda", "", [["0,3 l", "3,70"], ["0,5 l", "4,70"]], ""],
+    ["Wieselburger Stammbräu", "Flasche", [["0,5 l", "5,60"]], ""],
+    ["Weihenstephaner", "Flasche", [["0,5 l", "5,10"]], ""],
+    ["Birra Moretti", "Flasche", [["0,33 l", "4,40"]], ""],
+    ["Bier alkoholfrei", "Flasche", [["0,33 l", "4,00"], ["0,5 l", "5,10"]], ""],
+  ]},
+  { id: "caffe", title: "Caffè & liquori", note: "digestivi", group: "drinks", items: [
+    ["Espresso", "", "2,30", ""],
+    ["Espresso macchiato", "", "2,50", "G"],
+    ["Doppio espresso", "", "4,10", ""],
+    ["Doppio espresso macchiato", "", "4,50", "G"],
+    ["Verlängerter", "", "3,20", ""],
+    ["Cappuccino · Melange", "", "3,70", "G"],
+    ["Heiße Schokolade", "", "3,90", "G"],
+    ["Tee", "", "3,70", ""],
+    ["Latte macchiato", "", "4,00", "G"],
+    ["Caffè corretto Grappa · Sambuca", "", "5,00", ""],
+    ["Averna · Limoncello · Amaro Ischitano", "Spirituosen", [["0,2 l", "4,10"]], ""],
+    ["Grappa bianca", "Spirituosen", [["0,2 l", "4,50"]], ""],
+    ["Grappa barricata", "Spirituosen", [["0,2 l", "6,60"]], ""],
+    ["Sambuca", "Spirituosen", [["0,2 l", "4,00"]], ""],
+  ]},
+];
+
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const badges = a => a ? `<span class="al" aria-label="Allergene">${[...a].map(l => `<b title="${esc(ALLERGENS[l] || "")}">${l}</b>`).join("")}</span>` : "";
+
+function itemHTML([name, desc, price, al]) {
+  const multi = Array.isArray(price);
+  const top = multi
+    ? `<div class="row"><span class="name">${esc(name)}</span></div>`
+    : `<div class="row"><span class="name">${esc(name)}</span><span class="lead"></span><span class="price">${esc(price)}</span></div>`;
+  const sizes = multi ? `<div class="sizes">${price.map(([l, p]) => `<div class="size"><span class="lab">${esc(l)}</span><span class="lead"></span><span class="price">${esc(p)}</span></div>`).join("")}</div>` : "";
+  const d = (desc || al) ? `<p class="desc">${desc ? `<span>${esc(desc)}</span>` : ""}${badges(al)}</p>` : "";
+  const hay = (name + " " + desc).toLowerCase();
+  return `<article class="item${multi ? " multi" : ""}" data-hay="${esc(hay)}">${top}${d}${sizes}</article>`;
+}
+
+const root = document.getElementById("menu");
+root.innerHTML = MENU.map(s => {
+  const head = `<div class="sec-head"><h2>${esc(s.title)}</h2>${s.note ? `<span class="sec-note">${esc(s.note)}</span>` : ""}${badges(s.al)}</div>`;
+  const body = s.extras
+    ? `<div class="extras">${s.extras.map(([n, p]) => `<div class="size" data-hay="${esc(n.toLowerCase())}"><span class="lab">${esc(n)}</span><span class="lead"></span><span class="price">${esc(p)}</span></div>`).join("")}</div>`
+    : `<div class="grid">${s.items.map(itemHTML).join("")}</div>`;
+  return `<section id="${s.id}">${head}${body}</section>`;
+}).join("") + `<p class="empty" id="empty" hidden>Nichts gefunden · Nessun risultato</p>`;
+
+// chips
+const chips = document.getElementById("chips");
+let html = "", lastGroup = null;
+MENU.forEach(s => {
+  if (s.group && lastGroup !== s.group) html += `<span class="sep" aria-hidden="true"></span>`;
+  lastGroup = s.group;
+  html += `<a href="#${s.id}" data-id="${s.id}">${esc(s.title)}</a>`;
+});
+chips.innerHTML = html;
+
+// legend
+document.getElementById("legend").innerHTML = Object.entries(ALLERGENS).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join("");
+
+// active chip
+const links = [...chips.querySelectorAll("a")];
+function setActive(id) {
+  links.forEach(a => {
+    const on = a.dataset.id === id;
+    a.classList.toggle("on", on);
+    if (on) { const c = chips; const l = a.offsetLeft - c.clientWidth / 2 + a.clientWidth / 2; c.scrollTo({ left: l, behavior: "auto" }); }
+  });
+}
+function onScroll() {
+  const secs = [...root.querySelectorAll("section:not([hidden])")];
+  let cur = secs[0] && secs[0].id;
+  secs.forEach(s => { if (s.getBoundingClientRect().top < 160) cur = s.id; });
+  if (cur) setActive(cur);
+}
+addEventListener("scroll", onScroll, { passive: true });
+onScroll();
+
+// search
+const q = document.getElementById("q");
+q.addEventListener("input", () => {
+  const t = q.value.trim().toLowerCase();
+  let any = false;
+  root.querySelectorAll("section").forEach(sec => {
+    let n = 0;
+    sec.querySelectorAll("[data-hay]").forEach(el => {
+      const show = !t || el.dataset.hay.includes(t);
+      el.hidden = !show; if (show) n++;
+    });
+    sec.hidden = n === 0; if (n) any = true;
+  });
+  links.forEach(a => { const s = document.getElementById(a.dataset.id); a.hidden = s.hidden; });
+  document.getElementById("empty").hidden = any;
+  onScroll();
+});
+</script>
+
+</body></html>
